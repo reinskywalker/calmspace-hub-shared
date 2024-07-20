@@ -52,7 +52,7 @@
         </div>
         <div class="mx-auto">
             <div class="flex justify-between items-center py-4">
-                <a href="{{route('adminhome')}}" class="tracking-wide font-bold rounded border-2 border-blue-500 hover:border-blue-500 bg-blue-500 text-white hover:bg-blue-600 transition shadow-md py-2 px-6 items-center">Back</a>
+                <a href="{{route('masterdata')}}" class="tracking-wide font-bold rounded border-2 border-blue-500 hover:border-blue-500 bg-blue-500 text-white hover:bg-blue-600 transition shadow-md py-2 px-6 items-center">Back</a>
             </div>
             <div class="bg-white border-2 border-gray-300 shadow overflow-hidden sm:rounded-lg">
                 <div class="px-4 py-5 sm:px-6">

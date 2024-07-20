@@ -12,7 +12,7 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-jet-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
+                    <x-jet-nav-link href="/" :active="request()->routeIs('home')">
                         {{ __('Home') }}
                     </x-jet-nav-link>
                     <x-jet-nav-link href="{{ route('articles') }}" :active="request()->routeIs('articles')">
@@ -111,7 +111,7 @@
                             </x-jet-dropdown-link>
 
                             @hasrole('admin')
-                            <x-jet-dropdown-link href="{{ route('adminhome') }}" :inactive="request()->routeIs('adminhome')">
+                            <x-jet-dropdown-link href="{{ route('masterdata') }}" :inactive="request()->routeIs('masterdata')">
                                 {{ __('Admin Panel') }}
                             </x-jet-dropdown-link>
                             @endhasrole
@@ -181,7 +181,7 @@
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             @hasrole('admin')
-            <x-jet-responsive-nav-link href="{{ route('adminhome') }}" :active="request()->routeIs('adminhome')">
+            <x-jet-responsive-nav-link href="{{ route('masterdata') }}" :active="request()->routeIs('masterdata')">
                 {{ __('Admin Home') }}
             </x-jet-responsive-nav-link>
             @endhasrole

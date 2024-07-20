@@ -28,7 +28,7 @@ Route::get('/welcome', function () {
 
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/users', [ManageUserController::class, 'index'])->name('usersIndex');
-    Route::get('/adminhome', [AdminController::class, 'adminhome'])->name('adminhome');
+    Route::get('/masterdata', [AdminController::class, 'masterdata'])->name('masterdata');
     Route::get('/approval', [ApprovalController::class, 'viewapproval'])
         ->name('approval');
 });
