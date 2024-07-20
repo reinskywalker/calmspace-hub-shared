@@ -19,6 +19,13 @@ class Article extends Model
         'audio_video_url',
         'thumbnail_image_url',
         'content',
-        'posted_by'
+        'posted_by',
+        'status',
+        'user_id'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

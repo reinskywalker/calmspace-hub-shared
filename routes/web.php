@@ -40,9 +40,12 @@ Route::middleware(['auth', 'verified', 'role:admin|user'])->prefix('user')->grou
     Route::get('/home', [UserController::class, 'home'])
         ->name('home');
 
-    Route::get('/articles', [ArticleController::class, 'view'])
+    Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');
+
+    Route::get('/articles', [ArticleController::class, 'index'])
         ->name('articles');
 
+    Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
 
     Route::post('/deleteUserTest/{id}', [UserController::class, 'deleteUserTest'])
         ->name('deleteUserTest');
