@@ -78,6 +78,7 @@
 
                 <!-- Settings Dropdown -->
                 <div class="ml-3 relative">
+                    @if(Auth::check())
                     <x-jet-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
@@ -138,6 +139,7 @@
                             </form>
                         </x-slot>
                     </x-jet-dropdown>
+                    @endif
                 </div>
             </div>
 
@@ -166,17 +168,20 @@
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="flex items-center px-4">
-                @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
+                @if (Laravel\Jetstream\Jetstream::managesProfilePhotos() && Auth::check())
                 <div class="flex-shrink-0 mr-3">
                     <img class="h-10 w-10 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
                 </div>
                 @endif
 
+                @if(Auth::check())
                 <div>
                     <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
                     <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
                 </div>
+                @endif
             </div>
+
 
             <div class="mt-3 space-y-1">
                 <!-- Account Management -->

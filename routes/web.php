@@ -29,6 +29,8 @@ Route::get('/welcome', function () {
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/users', [ManageUserController::class, 'index'])->name('usersIndex');
     Route::get('/adminhome', [AdminController::class, 'adminhome'])->name('adminhome');
+    Route::get('/approval', [ApprovalController::class, 'viewapproval'])
+        ->name('approval');
 });
 
 Route::middleware(['auth', 'verified', 'role:admin|user'])->prefix('user')->group(function () {
@@ -39,8 +41,6 @@ Route::middleware(['auth', 'verified', 'role:admin|user'])->prefix('user')->grou
     Route::get('/articles', [ArticleController::class, 'view'])
         ->name('articles');
 
-    Route::get('/approval', [ApprovalController::class, 'viewapproval'])
-        ->name('approval');
 
     Route::post('/deleteUserTest/{id}', [UserController::class, 'deleteUserTest'])
         ->name('deleteUserTest');
