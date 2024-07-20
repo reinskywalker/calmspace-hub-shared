@@ -10,7 +10,7 @@ class UserController extends Controller
     {
         $activeUsers = User::count();
         return view(
-            'users.home',
+            'home',
             compact(
                 'activeUsers',
             )

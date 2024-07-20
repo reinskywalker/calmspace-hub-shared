@@ -19,12 +19,14 @@ use App\Http\Controllers\ManageUserController;
 */
 
 
-Route::get('/', [UserController::class, 'home'])
+Route::get('/', [ArticleController::class, 'view'])
     ->name('home');
 
 Route::get('/welcome', function () {
     return view('welcome');
 })->name('welcome');
+
+Route::get('/articles/{id}', [ArticleController::class, 'show'])->name('articles.show');
 
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/users', [ManageUserController::class, 'index'])->name('usersIndex');
