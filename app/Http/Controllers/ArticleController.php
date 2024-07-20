@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Article;
@@ -33,7 +34,6 @@ class ArticleController extends Controller
 
     public function store(Request $request)
     {
-        // Validate the incoming request data
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'audio_video_url' => 'nullable|url|max:255',
@@ -43,7 +43,6 @@ class ArticleController extends Controller
             'posted_by' => 'required|string|max:255',
         ]);
 
-        // Handle the thumbnail image upload
         if ($request->hasFile('thumbnail_image_file')) {
             $fileName = time() . '.' . $request->thumbnail_image_file->extension();
             $request->thumbnail_image_file->move(public_path('images'), $fileName);
@@ -52,11 +51,6 @@ class ArticleController extends Controller
             $thumbnailImageUrl = $request->thumbnail_image_url;
         }
 
-        // Log the validated data and thumbnail image URL for debugging
-        \Log::info('Validated Data:', $validated);
-        \Log::info('Thumbnail Image URL:', $thumbnailImageUrl);
-
-        // Create a new article
         $article = new Article([
             'title' => $validated['title'],
             'audio_video_url' => $validated['audio_video_url'],
@@ -67,10 +61,6 @@ class ArticleController extends Controller
             'user_id' => Auth::id(),
         ]);
 
-        // Log the article data before saving for debugging
-        \Log::info('Article Data:', $article->toArray());
-
-        // Save the article to the database
         $article->save();
 
         return redirect()->route('articles.create')->with('success', 'Article created successfully!');

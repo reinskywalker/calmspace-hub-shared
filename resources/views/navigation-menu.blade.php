@@ -15,14 +15,17 @@
                     <x-jet-nav-link href="/" :active="request()->routeIs('home')">
                         {{ __('Home') }}
                     </x-jet-nav-link>
+                    @if(Auth::check())
                     <x-jet-nav-link href="{{ route('articles') }}" :active="request()->routeIs('articles')">
                         {{ __('Your Articles') }}
                     </x-jet-nav-link>
+
                     @hasrole('admin')
                     <x-jet-nav-link href="{{ route('approval') }}" :active="request()->routeIs('approval')">
                         {{ __('Approval') }}
                     </x-jet-nav-link>
                     @endhasrole
+                    @endif
                 </div>
             </div>
 
