@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="md:flex justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Edu Hub Feeds') }}
+                {{ __('Approval') }}
             </h2>
         </div>
     </x-slot>
@@ -21,7 +21,6 @@
                                         <circle cx="9" cy="7" r="4"></circle>
                                         <path d="M23 21v-2a4 4 0 00-3-3.87m-4-12a4 4 0 010 7.75"></path>
                                     </svg>
-                                    <h2 class="title-font font-medium text-xl text-gray-900">{{$activeUsers}}</h2>
                                     <p class="leading-relaxed">Users</p>
                                 </div>
                             </div>

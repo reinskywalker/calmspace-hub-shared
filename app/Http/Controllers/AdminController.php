@@ -12,16 +12,4 @@ class AdminController extends Controller
         $latestUsers = User::latest()->take(5)->get();
         return view('admins.adminhome', compact('latestUsers', 'userCount'));
     }
-
-    public function globalQuizzes()
-    {
-        $activeUsers = User::count();
-
-        return view(
-            'admins.globalQuizzes',
-            compact(
-                'activeUsers',
-            )
-        );
-    }
 }
