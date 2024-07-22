@@ -26,7 +26,7 @@
                 </div>
                 @endif
 
-                <form method="POST" action="{{ route('articles.store') }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('articles.store') }}" enctype="multipart/form-data" onsubmit="return handleFormSubmit(event)">
                     @csrf
                     <div class="mb-4">
                         <label for="title" class="block text-gray-700 text-sm font-bold mb-2">Title:</label>
@@ -88,13 +88,17 @@
                 theme: 'snow'
             });
 
-            var form = document.querySelector('form');
-            form.onsubmit = function() {
-                var content = document.querySelector('input[name=content]');
-                content.value = quill.root.innerHTML;
+            window.handleFormSubmit = function(event) {
+                var contentInput = document.querySelector('input[name=content]');
+                contentInput.value = quill.root.innerHTML.trim();
+                console.log('Content:', contentInput.value);
 
-                // Debugging: Check if content is correctly set
-                console.log('Content:', content.value);
+                if (!contentInput.value) {
+                    alert('Content is required.');
+                    return false;
+                }
+
+                return true;
             };
 
             var uploadOption = document.getElementById('upload_option');

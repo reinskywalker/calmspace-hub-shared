@@ -28,7 +28,7 @@ class ArticleController extends Controller
 
     public function index()
     {
-        $articles = Article::where('user_id', Auth::id())->get();
+        $articles = Article::paginate(10);
         return view('articles.articles', compact('articles'));
     }
 
@@ -64,5 +64,37 @@ class ArticleController extends Controller
         $article->save();
 
         return redirect()->route('articles.create')->with('success', 'Article created successfully!');
+    }
+
+    public function destroy($id)
+    {
+        $article = Article::findOrFail($id);
+
+        if (Auth::id() !== $article->user_id) {
+            return redirect()->route('home')->with('error', 'You do not have permission to delete this article.');
+        }
+
+        $article->delete();
+
+        return redirect()->route('home')->with('success', 'Article deleted successfully!');
+    }
+
+    public function mypost()
+    {
+        $articles = Article::where('user_id', Auth::id())->paginate(10);
+        return view('articles.mypost', compact('articles'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:pending,published,revised',
+        ]);
+
+        $article = Article::findOrFail($id);
+        $article->status = $request->input('status');
+        $article->save();
+
+        return redirect()->route('articles.index')->with('success', 'Article status updated successfully!');
     }
 }

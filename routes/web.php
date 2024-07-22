@@ -38,7 +38,11 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(fu
 Route::middleware(['auth', 'verified', 'role:admin|user'])->prefix('user')->group(function () {
     Route::get('/home', [UserController::class, 'home'])->name('user.home');
     Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');
-    Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
+    Route::get('/articles', [ArticleController::class, 'index'])
+        ->name('articles');
+    Route::get('/articles/mypost', [ArticleController::class, 'mypost'])
+        ->name('articles');
+    Route::delete('/articles/{id}', [ArticleController::class, 'destroy'])->name('articles.destroy');
     Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
     Route::post('/deleteUserTest/{id}', [UserController::class, 'deleteUserTest'])->name('deleteUserTest');
 });
