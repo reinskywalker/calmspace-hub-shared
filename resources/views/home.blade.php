@@ -32,16 +32,6 @@
                                             <path d="M5 12h14M12 5l7 7-7 7"></path>
                                         </svg>
                                     </a>
-                                    @if(Auth::check() && (Auth::id() === $article->user_id || Auth::user()->isAdmin()))
-                                    <div class="flex space-x-2 mt-4">
-                                        <a href="{{ route('articles.edit', $article->id) }}" class="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-700 transition duration-300">{{ __('Edit') }}</a>
-                                        <form method="POST" action="{{ route('articles.destroy', $article->id) }}" onsubmit="return confirm('Are you sure you want to delete this article?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-700 transition duration-300">{{ __('Delete') }}</button>
-                                        </form>
-                                    </div>
-                                    @endif
                                 </div>
                             </div>
                             @endforeach
