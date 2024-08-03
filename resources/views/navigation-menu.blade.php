@@ -141,11 +141,12 @@
                     @else
                     <x-jet-dropdown align="right" width="48">
                         <x-slot name="trigger">
-                            <button class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
-                                <div class="block rounded-md rounded-full px-4 py-2 text-xs text-gray-800 flex items-center border border-gray-300">
+                            <button class="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex text-sm transition">
+                                <div class="flex items-center">
                                     Login or Register?
                                 </div>
                             </button>
+
                             @endif
                         </x-slot>
 

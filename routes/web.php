@@ -6,6 +6,8 @@ use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ManageUserController;
+use App\Http\Controllers\DiscussionController;
+use App\Models\MasterData;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,7 +33,8 @@ Route::get('/articles/{id}', [ArticleController::class, 'show'])->name('articles
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/users', [ManageUserController::class, 'index'])->name('users.index');
     Route::get('/masterdata', [AdminController::class, 'masterdata'])->name('masterdata');
-    Route::get('/approval', [ApprovalController::class, 'viewapproval'])->name('approval');
+    Route::get('/approval', [ApprovalController::class, 'index'])->name('approval');
+    Route::get('/articles', [ArticleController::class, 'adminAuth'])->name('admins.articles');
 });
 
 // User & Admin 
@@ -42,6 +45,16 @@ Route::middleware(['auth', 'verified', 'role:admin|user'])->prefix('user')->grou
         ->name('articles');
     Route::get('/articles/mypost', [ArticleController::class, 'mypost'])
         ->name('articles');
+
+    Route::post('/discussions', [DiscussionController::class, 'store'])->name('discussions.store');
+    Route::patch('/articles/{id}/update-status', [ArticleController::class, 'updateStatus'])->name('articles.updateStatus');
+
+    // Route to show the form for editing an article
+    Route::get('/articles/{id}/edit', [ArticleController::class, 'edit'])->name('articles.edit');
+
+    // Route to handle the update request
+    Route::put('/articles/{id}', [ArticleController::class, 'update'])->name('articles.update');
+
     Route::delete('/articles/{id}', [ArticleController::class, 'destroy'])->name('articles.destroy');
     Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
     Route::post('/deleteUserTest/{id}', [UserController::class, 'deleteUserTest'])->name('deleteUserTest');

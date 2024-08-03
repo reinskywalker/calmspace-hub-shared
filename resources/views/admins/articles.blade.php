@@ -4,7 +4,7 @@
 
         <div class="md:flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Your Articles') }}
+                {{ __('Articles') }}
             </h2>
         </div>
     </x-slot>
@@ -27,15 +27,17 @@
 
                 <section class="text-gray-600 body-font">
                     <div class="container px-5 py-5 mx-auto">
-
+                        <nav class="flex space-x-4 mt-2 md:mt-0 md:ml-auto">
+                            <a href="{{ route('articles.create') }}" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 transition duration-300">{{ __('Create New Article') }}</a>
+                        </nav>
                         @if($articles->count() > 0)
                         <div class="overflow-x-auto">
                             <table class="min-w-full bg-white">
                                 <thead>
                                     <tr>
                                         <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-blue-500 tracking-wider">Thumbnail</th>
-                                        <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-blue-500 tracking-wider">User</th>
                                         <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-blue-500 tracking-wider">Title</th>
+                                        <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-blue-500 tracking-wider">Content</th>
                                         <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-blue-500 tracking-wider">Status</th>
                                         <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-blue-500 tracking-wider">Date Posted</th>
                                         <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-blue-500 tracking-wider">Actions</th>
@@ -48,10 +50,10 @@
                                             <img src="{{ asset($article->thumbnail_image_url) }}" alt="{{ $article->title }}" class="w-24 h-24 object-cover">
                                         </td>
                                         <td class="px-6 py-4 border-b border-gray-500">
-                                            {{ $article->posted_by }}
+                                            {{ $article->title }}
                                         </td>
                                         <td class="px-6 py-4 border-b border-gray-500">
-                                            {{$article->title}}
+                                            {!! Str::limit($article->content, 100) !!}
                                         </td>
                                         <td class="px-6 py-4 border-b border-gray-500">
                                             {{ $article->status }}

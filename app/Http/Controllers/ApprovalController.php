@@ -14,4 +14,11 @@ class ApprovalController extends Controller
             compact('articles'),
         );
     }
+
+    public function index()
+    {
+        $articles = Article::where('status', '!=', 'published')->paginate(10);
+
+        return view('articles.approval', compact('articles'));
+    }
 }

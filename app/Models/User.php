@@ -62,6 +62,11 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+    public function discussions()
+    {
+        return $this->hasMany(Discussion::class);
+    }
+
     public static function search($search)
     {
         return empty($search) ? static::query()

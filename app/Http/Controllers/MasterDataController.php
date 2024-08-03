@@ -42,18 +42,13 @@ class ArticleController extends Controller
         return view('articles.create');
     }
 
+
     public function index()
     {
         $articles = Article::where('status', '!=', 'published')->paginate(10);
 
         return view('articles.articles', compact('articles'));
     }
-    public function adminAuth()
-    {
-        $articles = Article::paginate(10);
-        return view('articles.mypost', compact('articles'));
-    }
-
 
 
     public function store(Request $request)

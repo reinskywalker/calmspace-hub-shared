@@ -30,7 +30,7 @@ class RolesPermissionsSeeder extends Seeder
             ->givePermissionTo('manage site');
 
         $role = Role::create(['name' => 'super-admin'])
-            ->givePermissionTo('manage admins');
+            ->givePermissionTo('    ');
 
         // or may be done by chaining
         $role1 = Role::create(['name' => 'user'])

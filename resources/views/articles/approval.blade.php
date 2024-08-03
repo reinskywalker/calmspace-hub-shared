@@ -42,6 +42,7 @@
                                 </thead>
                                 <tbody class="bg-white">
                                     @foreach ($articles as $article)
+
                                     <tr>
                                         <td class="px-6 py-4 border-b border-gray-500">
                                             <img src="{{ asset($article->thumbnail_image_url) }}" alt="{{ $article->title }}" class="w-24 h-24 object-cover">
@@ -50,7 +51,7 @@
                                             {{ $article->title }}
                                         </td>
                                         <td class="px-6 py-4 border-b border-gray-500">
-                                            {{ Str::limit($article->content, 100) }}
+                                            {!! Str::limit($article->content, 100) !!}
                                         </td>
                                         <td class="px-6 py-4 border-b border-gray-500">
                                             {{ $article->status }}
@@ -58,8 +59,22 @@
                                         <td class="px-6 py-4 border-b border-gray-500">
                                             {{ $article->created_at->format('d M Y') }}
                                         </td>
-
+                                        <td class="px-6 py-4 border-b border-gray-500">
+                                            <form action="{{ route('articles.updateStatus', $article->id) }}" method="POST" style="display: inline;">
+                                                @csrf
+                                                @method('PATCH')
+                                                <input type="hidden" name="status" value="published">
+                                                <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-700 transition duration-300">{{ __('Approve') }}</button>
+                                            </form>
+                                            <form action="{{ route('articles.updateStatus', $article->id) }}" method="POST" style="display: inline;">
+                                                @csrf
+                                                @method('PATCH')
+                                                <input type="hidden" name="status" value="revised">
+                                                <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-700 transition duration-300">{{ __('Reject') }}</button>
+                                            </form>
+                                        </td>
                                     </tr>
+
                                     @endforeach
                                 </tbody>
                             </table>
@@ -67,7 +82,7 @@
                         @else
                         <div class="p-4 w-full">
                             <div class="border-2 border-gray-200 px-4 py-6 rounded-lg bg-white">
-                                <h2 class="title-font font-medium text-2xl text-gray-900">No articles available</h2>
+                                <h2 class="title-font font-medium text-2xl text-gray-900">No Approval Requested</h2>
                             </div>
                         </div>
                         @endif
@@ -80,72 +95,4 @@
             </div>
         </div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const approveButtons = document.querySelectorAll('.approve-btn');
-            const reviseButtons = document.querySelectorAll('.revise-btn');
-            const deleteButtons = document.querySelectorAll('.delete-btn');
-
-            approveButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const articleId = this.getAttribute('data-id');
-
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: "Do you want to approve this article?",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, approve it!'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            document.getElementById(`approve-form-${articleId}`).submit();
-                        }
-                    });
-                });
-            });
-
-            reviseButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const articleId = this.getAttribute('data-id');
-
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: "Do you want to request revision for this article?",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, request revision!'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            document.getElementById(`revise-form-${articleId}`).submit();
-                        }
-                    });
-                });
-            });
-
-            deleteButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const articleId = this.getAttribute('data-id');
-
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: "You won't be able to revert this!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, delete it!'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            document.getElementById(`delete-form-${articleId}`).submit();
-                        }
-                    });
-                });
-            });
-        });
-    </script>
 </x-app-layout>

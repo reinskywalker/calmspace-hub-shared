@@ -89,6 +89,8 @@
                             </dd>
                             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-1">
                                 <div class="flex justify-end items-center">
+
+                                    @can('manage admins')
                                     <a href="#" class="text-green-500 hover:text-green-700">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="text-blue-500 hover:text-blue-700 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
@@ -100,7 +102,6 @@
                                             <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
                                         </svg>
                                     </a>
-                                    @can('manage admins')
                                     <a class="text-red-500 hover:text-red-700">
                                         <button type="submit" wire:click="deleteUser({{ $user->id }})">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 pt-1" viewBox="0 0 20 20" fill="currentColor">
