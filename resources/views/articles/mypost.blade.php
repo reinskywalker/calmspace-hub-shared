@@ -27,7 +27,9 @@
 
                 <section class="text-gray-600 body-font">
                     <div class="container px-5 py-5 mx-auto">
-
+                        <nav class="flex space-x-4 mt-2 md:mt-0 md:ml-auto">
+                            <a href="{{ route('articles.create') }}" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 transition duration-300">{{ __('Create New Article') }}</a>
+                        </nav>
                         @if($articles->count() > 0)
                         <div class="overflow-x-auto">
                             <table class="min-w-full bg-white">
