@@ -7,6 +7,7 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ManageUserController;
 use App\Http\Controllers\DiscussionController;
+use App\Http\Controllers\MoodTrackingController;
 use App\Models\MasterData;
 
 /*
@@ -59,3 +60,19 @@ Route::middleware(['auth', 'verified', 'role:admin|user'])->prefix('user')->grou
     Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
     Route::post('/deleteUserTest/{id}', [UserController::class, 'deleteUserTest'])->name('deleteUserTest');
 });
+
+
+Route::get('/mood-tracking', [MoodTrackingController::class, 'index'])->name('mood.index');
+Route::post('/mood-tracking', [MoodTrackingController::class, 'store'])->name('mood.track');
+
+Route::get('/mood-report', function () {
+    return view('moods.mood-report');
+})->name('mood.report');
+
+Route::get('/forum-discussion', function () {
+    return view('discussion.forum-discussion');
+})->name('discussion.forum-discussion');
+
+Route::get('/ask-question', function () {
+    return view('discussion.ask-question');
+})->name('discussion.ask-question');

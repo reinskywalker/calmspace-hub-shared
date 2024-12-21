@@ -15,9 +15,18 @@
                     <x-jet-nav-link href="/" :active="request()->routeIs('home')">
                         {{ __('Home') }}
                     </x-jet-nav-link>
+
                     @if(Auth::check())
-                    <x-jet-nav-link href="{{ route('articles') }}" :active="request()->routeIs('articles')">
-                        {{ __('Your Articles') }}
+                    <x-jet-nav-link href="{{ route('mood.index') }}" :active="request()->routeIs('mood.index')">
+                        {{ __('Mood Tracking') }}
+                    </x-jet-nav-link>
+
+                    <x-jet-nav-link href="{{ route('mood.report') }}" :active="request()->routeIs('mood.report')">
+                        {{ __('Mood Report') }}
+                    </x-jet-nav-link>
+
+                    <x-jet-nav-link href="{{ route('discussion.forum-discussion') }}" :active="request()->routeIs('discussion.forum-discussion')">
+                        {{ __('Forum Discussion') }}
                     </x-jet-nav-link>
 
                     @hasrole('admin')
@@ -221,6 +230,7 @@
                 </x-jet-responsive-nav-link>
                 @endif
 
+                @if(Auth::check())
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
@@ -230,7 +240,7 @@
                         {{ __('Log Out') }}
                     </x-jet-responsive-nav-link>
                 </form>
-
+                @endif
                 <!-- Team Management -->
                 @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())
                 <div class="border-t border-gray-200"></div>
