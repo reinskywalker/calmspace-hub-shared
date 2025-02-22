@@ -11,63 +11,95 @@ use Illuminate\Support\Str;
 
 class MoodTrackingController extends Controller
 {
-    /**
-     * Display the mood tracking form.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $userId = Auth::id();
         $today = Carbon::today();
 
-        // Check if today's mood has been submitted
-        $alreadySubmitted = MoodTracking::where('user_id', $userId)
+        $submittedMoods = MoodTracking::where('user_id', $userId)
             ->whereDate('tracking_date', $today)
-            ->exists();
+            ->with('mood')
+            ->get();
 
-        // Fetch moods from database
+        $alreadySubmitted = $submittedMoods->isNotEmpty();
+
         $moods = MoodMaster::all();
 
-        return view('moods.mood-tracking', compact('alreadySubmitted', 'moods'));
+        return view('moods.mood-tracking', compact('alreadySubmitted', 'moods', 'submittedMoods'));
     }
 
-    /**
-     * Store the submitted mood.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $request->validate([
-            'mood_code' => 'required|exists:mood_master,code', // Validate mood_code exists in mood_master
+            'mood_code' => 'required|exists:mood_master,id',
         ]);
 
-        $userId = Auth::id();
-        dd($userId);
-        $today = Carbon::today();
+        $userId = Auth::user()->id;
 
-        // Check if user already submitted today's mood
-        $alreadySubmitted = MoodTracking::where('user_id', $userId)
-            ->whereDate('tracking_date', $today)
-            ->exists();
-
-        if ($alreadySubmitted) {
-            return redirect()->route('mood.index')->with('message', "You already submitted today's mood!");
+        if (!$userId) {
+            return redirect()->route('login')->with('error', 'You need to login first.');
         }
 
-        // Find mood by mood_code
-        $mood = MoodMaster::where('code', $request->mood_code)->firstOrFail();
+        $checkUser = \App\Models\User::where('id', $userId)->exists();
 
-        // Create mood tracking entry
+        if (!$checkUser) {
+            return redirect()->route('mood.index')->with('error', 'Invalid user.');
+        }
+
+        $today = Carbon::today();
+
+        $mood = MoodMaster::where('id', $request->mood_code)->first();
+
+        if (!$mood) {
+            return redirect()->route('mood.index')->with('error', 'Invalid mood selection.');
+        }
+
+        // dd($userId, gettype($userId));
+        // dd(Auth::id(), gettype(Auth::id()));
+
         MoodTracking::create([
             'id' => Str::uuid(),
-            'user_id' => $userId,
-            'mood_id' => $mood->id, // Store the ID of the mood found
+            'user_id' => (string) $userId,
+            'mood_id' => (string) $mood->id,
             'tracking_date' => $today,
         ]);
 
         return redirect()->route('mood.index')->with('message', "Today's mood submitted successfully!");
+    }
+
+    public function report()
+    {
+        $userId = Auth::id();
+        $currentMonth = now()->format('Y-m');
+        $today = now()->format('Y-m-d');
+
+        $moodData = MoodTracking::where('user_id', $userId)
+            ->where('tracking_date', 'like', "$currentMonth%")
+            ->with('mood')
+            ->get()
+            ->groupBy('tracking_date');
+
+        $moodScores = [];
+        $moodLevels = [
+            '😢 Sad' => 1,
+            '😟 Nervous' => 2,
+            '🤒 Sick' => 2,
+            '😴 Tired' => 3,
+            '💼 Productive' => 4,
+            '😊 Happy' => 5,
+        ];
+
+        for ($i = 1; $i <= now()->daysInMonth; $i++) {
+            $date = now()->format("Y-m-") . str_pad($i, 2, '0', STR_PAD_LEFT);
+            if (isset($moodData[$date])) {
+                $moods = $moodData[$date]->pluck('mood.name')->toArray();
+                $avgMood = array_sum(array_map(fn($m) => $moodLevels[$m] ?? 3, $moods)) / count($moods);
+                $moodScores[$date] = round($avgMood, 1);
+            } else {
+                $moodScores[$date] = null;
+            }
+        }
+
+        return view('moods.mood-report', compact('moodData', 'today', 'moodScores'));
     }
 }

@@ -26,7 +26,12 @@ class User extends Authenticatable
      *
      * @var array
      */
+
+    public $incrementing = false; // Pastikan UUID tidak di-cast ke integer
+    protected $keyType = 'string'; // Pastikan UUID di-handle sebagai string
+
     protected $fillable = [
+        'id',
         'name',
         'email',
         'password',
@@ -61,6 +66,11 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function getAuthIdentifier()
+    {
+        return (string) $this->attributes['id']; // Pastikan return UUID string
+    }
 
     public function discussions()
     {

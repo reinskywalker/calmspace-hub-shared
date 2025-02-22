@@ -25,4 +25,9 @@ class MoodTracking extends Model
             }
         });
     }
+
+    public function mood()
+    {
+        return $this->belongsTo(MoodMaster::class, 'mood_id');
+    }
 }

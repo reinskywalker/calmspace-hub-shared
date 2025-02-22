@@ -42,11 +42,25 @@
                             @endforeach
                         </div>
                         @else
-                        <div class="p-4 w-full">
-                            <div class="border-2 border-gray-200 px-4 py-6 rounded-lg bg-white">
-                                <h2 class="title-font font-medium text-2xl text-gray-900">Oops! Looks like we're all out of guided meditations for now</h2>
+                        <!-- Video Section -->
+                        <div class="flex flex-wrap justify-center gap-6 mt-10">
+                            <!-- Video 1 -->
+                            <div class="w-full sm:w-1/2 md:w-1/3 bg-gray-700 rounded-lg shadow-lg overflow-hidden">
+                                <video class="w-full h-auto object-cover rounded-lg shadow-lg" controls>
+                                    <source src="{{ asset('videos/video_1.mp4') }}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+
+                            <!-- Video 2 -->
+                            <div class="w-full sm:w-1/2 md:w-1/3 bg-gray-700 rounded-lg shadow-lg overflow-hidden">
+                                <video class="w-full h-auto object-cover rounded-lg shadow-lg" controls>
+                                    <source src="{{ asset('videos/video_2.mp4') }}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
                             </div>
                         </div>
+
                         @endif
                         <div class="mt-4">
                             {{ $articles->links() }}
@@ -77,6 +91,14 @@
                         <div class="text-center mb-10">
                             <h1 class="sm:text-4xl text-3xl font-medium title-font text-gray-900 mb-4">Your Path to Mental Wellness</h1>
                             <p class="text-base leading-relaxed xl:w-2/4 lg:w-3/4 mx-auto text-gray-500">Calmspace is here to support your mental health journey with tools, resources, and a supportive community.</p>
+                        </div>
+
+                        <!-- Video Section -->
+                        <div class="relative w-full h-40 bg-gray-700 flex items-center justify-center mt-16 overflow-hidden">
+                            <video class="w-full h-full object-cover opacity-100 rounded-lg shadow-lg" autoplay loop muted playsinline>
+                                <source src="{{ asset('images/mental-video.mp4') }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 text-center">

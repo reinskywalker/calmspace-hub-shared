@@ -12,7 +12,7 @@
             <div class="mx-auto px-5 py-10">
                 <div class="text-center mb-10">
                     <h1 class="sm:text-4xl text-3xl font-medium title-font text-gray-900 mb-4">Mood Tracker</h1>
-                    <p class="text-base leading-relaxed text-gray-500">Your mood trends and daily entries for the selected month.</p>
+                    <p class="text-base leading-relaxed text-gray-500">Your mood trends and daily entries for {{ now()->format('F Y') }}.</p>
                 </div>
 
                 <!-- Line Chart -->
@@ -32,21 +32,30 @@
                         </thead>
                         <tbody>
                             @php
-                            $moods = ['😠 Angry', '😊 Happy', '💼 Productive', '😢 Sad', '😟 Nervous', '🤒 Sick', '😴 Tired'];
-                            $daysInMonth = 31;
-                            $startDay = 0; // Adjust based on the actual start day of the month
+                            $daysInMonth = now()->daysInMonth;
+                            $firstDayOfMonth = now()->startOfMonth()->dayOfWeek;
                             $currentDay = 1;
                             @endphp
                             @for ($week = 0; $week < 6; $week++)
                                 <tr>
                                 @for ($dayOfWeek = 0; $dayOfWeek < 7; $dayOfWeek++)
-                                    @if (($week===0 && $dayOfWeek < $startDay) || $currentDay> $daysInMonth)
+                                    @if (($week===0 && $dayOfWeek < $firstDayOfMonth) || $currentDay> $daysInMonth)
                                     <td class="border border-gray-300 px-4 py-6 bg-gray-50"></td>
                                     @else
-                                    <td class="border border-gray-300 px-4 py-6 bg-white">
+                                    @php
+                                    $date = now()->format("Y-m-") . str_pad($currentDay, 2, '0', STR_PAD_LEFT);
+                                    $isToday = ($date == $today);
+                                    @endphp
+                                    <td class="border border-gray-300 px-4 py-6 {{ $isToday ? 'bg-yellow-200' : 'bg-white' }}">
                                         <div class="font-bold text-lg text-gray-900">{{ $currentDay }}</div>
                                         <div class="text-gray-700 text-sm mt-2">
-                                            {{ $moods[array_rand($moods)] }}
+                                            @if(isset($moodData[$date]))
+                                            @foreach($moodData[$date] as $mood)
+                                            {{ $mood->mood->emoji ?? '❓' }}
+                                            @endforeach
+                                            @else
+                                            <span class="text-gray-400">No mood</span>
+                                            @endif
                                         </div>
                                     </td>
                                     @php $currentDay++; @endphp
@@ -67,14 +76,14 @@
         const moodChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: Array.from({
-                    length: 31
-                }, (_, i) => i + 1),
+                labels: {
+                    !!json_encode(array_keys($moodScores)) !!
+                },
                 datasets: [{
                     label: 'Mood Level',
-                    data: Array.from({
-                        length: 31
-                    }, () => Math.floor(Math.random() * 5) + 1),
+                    data: {
+                        !!json_encode(array_values($moodScores)) !!
+                    },
                     borderColor: 'rgba(75, 192, 192, 1)',
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
                     fill: true,
@@ -89,7 +98,7 @@
                     },
                     title: {
                         display: true,
-                        text: 'Mood Trends for December 2024'
+                        text: 'Mood Trends for {{ now()->format("F Y") }}'
                     }
                 },
                 scales: {

@@ -6,6 +6,7 @@ use App\Models\Article;
 use App\Models\Discussion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class ArticleController extends Controller
 {
@@ -33,9 +34,11 @@ class ArticleController extends Controller
 
     public function show($id)
     {
-        $article = Article::with('discussions')->findOrFail($id);
+        $article = Article::with('comments')->findOrFail($id);
         return view('show', compact('article'));
     }
+
+
 
     public function create()
     {
@@ -60,34 +63,32 @@ class ArticleController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'audio_video_url' => 'nullable|url|max:255',
-            'thumbnail_image_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'thumbnail_image_url' => 'nullable|url|max:255',
             'content' => 'required|string',
-            'posted_by' => 'required|string|max:255',
         ]);
 
-        if ($request->hasFile('thumbnail_image_file')) {
-            $fileName = time() . '.' . $request->thumbnail_image_file->extension();
-            $request->thumbnail_image_file->move(public_path('images'), $fileName);
-            $thumbnailImageUrl = 'images/' . $fileName;
-        } else {
-            $thumbnailImageUrl = $request->thumbnail_image_url;
+        $slug = Str::slug($validated['title']);
+        $originalSlug = $slug;
+        $count = 1;
+
+        while (Article::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $count;
+            $count++;
         }
 
         $article = new Article([
+            'id' => Str::uuid(),
             'title' => $validated['title'],
-            'audio_video_url' => $validated['audio_video_url'],
-            'thumbnail_image_url' => $thumbnailImageUrl,
             'content' => $validated['content'],
-            'posted_by' => $validated['posted_by'],
-            'status' => 'pending',
             'user_id' => Auth::id(),
+            'author' => Auth::user()->name,
+            'slug' => $slug,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
         $article->save();
 
-        return redirect()->route('articles.create')->with('success', 'Article created successfully!');
+        return redirect()->route('forum-discussion')->with('success', 'Artikel berhasil dibuat!');
     }
 
     public function destroy($id)

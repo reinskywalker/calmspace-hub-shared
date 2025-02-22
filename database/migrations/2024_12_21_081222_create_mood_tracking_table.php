@@ -18,7 +18,7 @@ class CreateMoodTrackingTable extends Migration
             $table->uuid('user_id');
             $table->uuid('mood_id');
             $table->text('note')->nullable();
-            $table->date('tracking_date')->unique();
+            $table->date('tracking_date')->index();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

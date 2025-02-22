@@ -4,33 +4,30 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+use App\Models\Comment;
 
 class Article extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'title',
-        'audio_video_url',
-        'thumbnail_image_url',
-        'content',
-        'posted_by',
-        'status',
-        'user_id'
-    ];
+    protected $table = 'articles';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
-    public function discussions()
+    protected $fillable = ['id', 'title', 'content', 'author', 'user_id', 'slug'];
+
+    protected static function boot()
     {
-        return $this->hasMany(Discussion::class);
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->id = (string) Str::uuid();
+        });
     }
 
-    public function user()
+    public function comments()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasMany(Comment::class, 'article_id', 'id');
     }
 }
